@@ -5,6 +5,7 @@
 #include <cctype>
 #include <iostream>
 #include <print>
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -129,7 +130,7 @@ bool ClearTasks(TodoList &todo_list) {
   return true;
 }
 
-void OutputHelp() {
+void OutputHelp(const bool is_interactive) {
   std::println("Help:");
   std::println("-------------------------------------------------------------");
   std::println("  {:<24} : {}", "add (a) <text>", "Add a new task");
@@ -139,70 +140,120 @@ void OutputHelp() {
   std::println("  {:<24} : {}", "list (l)", "List all tasks");
   std::println("  {:<24} : {}", "clear (c)", "Clear all tasks");
   std::println("  {:<24} : {}", "help (h)", "List all utility commands");
+  if (is_interactive) {
+    std::println("  {:<24} : {}", "quit (q)", "Exits out of interactive mode");
+  }
   std::println("-------------------------------------------------------------");
 }
 
-int main(const int argc, const char *argv[]) {
-  if (argc < 2) {
-    std::cerr << "No args passed\n";
-    return 1;
-  }
-
-  const std::vector<std::string> args(argv, argv + argc);
-  const auto command = StringToLower(args[1]);
+bool HandleCommand(const std::vector<std::string> args,
+                   const bool is_interactive) {
   TodoList todo_list{};
-
-  bool success{true};
+  const auto command = StringToLower(args[1]);
 
   if (command == "add" || command == "a") {
     if (args.size() < 3) {
       std::cerr << "Error: Missing text for 'add' command.\n";
-      success = false;
+      return false;
     } else {
       std::string text{args[2]};
       for (size_t i = 3; i < args.size(); ++i) {
         text += ' ' + args[i];
       }
 
-      success = AddTask(todo_list, text);
+      return AddTask(todo_list, text);
     }
   } else if (command == "edit" || command == "e") {
     if (args.size() < 4) {
       std::cerr
           << "Error: Missing line number and/or text for 'edit' command.\n";
-      success = false;
+      return false;
     } else {
       std::string text{args[3]};
       for (size_t i = 4; i < args.size(); ++i) {
         text += ' ' + args[i];
       }
 
-      success = EditTask(todo_list, args[2], text);
+      return EditTask(todo_list, args[2], text);
     }
   } else if (command == "remove" || command == "r") {
     if (args.size() < 3) {
       std::cerr << "Error: Missing line number for 'remove' command.\n";
-      success = false;
+      return false;
     } else {
-      success = RemoveTask(todo_list, args[2]);
+      return RemoveTask(todo_list, args[2]);
     }
   } else if (command == "done" || command == "d") {
     if (args.size() < 3) {
       std::cerr << "Error: Missing line number for 'done' command.\n";
-      success = false;
+      return false;
     } else {
-      success = DoneTask(todo_list, args[2]);
+      return DoneTask(todo_list, args[2]);
     }
   } else if (command == "list" || command == "l") {
-    success = ListTasks(todo_list);
+    return ListTasks(todo_list);
   } else if (command == "clear" || command == "c") {
-    success = ClearTasks(todo_list);
+    return ClearTasks(todo_list);
   } else if (command == "help" || command == "h") {
-    OutputHelp();
+    OutputHelp(is_interactive);
   } else {
     std::cerr << "Error: Invalid command '" << command
               << "' (Run 'help' for commands).\n";
-    success = false;
+    return false;
+  }
+
+  return true;
+}
+
+int main(const int argc, const char *argv[]) {
+  bool interactive_mode{false};
+  bool success{true};
+
+  if (argc < 2) {
+    interactive_mode = true;
+
+    std::println(
+        "\nEntering interactive mode. (Type 'h' for help, 'q' to quit)\n");
+    std::println(
+        "-------------------------------------------------------------");
+
+    std::string s;
+    std::print("\n> ");
+    while (std::getline(std::cin, s, '\n')) {
+      std::vector<std::string> args{static_cast<std::string>(argv[0])};
+      std::stringstream ss(s);
+
+      std::string arg{};
+      while (ss >> arg) {
+        args.push_back(arg);
+      }
+
+      if (args.size() < 2) {
+        continue;
+      }
+
+      std::println();
+
+      const std::string command = StringToLower(args[1]);
+      if (command == "quit" || command == "q") {
+        break;
+      }
+
+      success = HandleCommand(args, true);
+
+      if (!success) {
+        break;
+      }
+
+      std::print("\n> ");
+    }
+
+    std::println(
+        "-------------------------------------------------------------");
+  } else {
+    const std::vector<std::string> args(argv, argv + argc);
+
+    success = HandleCommand(args, false);
   }
 
   return success ? 0 : 1;

@@ -91,7 +91,8 @@ std::expected<void, TodoListError> TodoList::List() const {
       for (size_t i = 0; i < done_lines.size(); ++i) {
         std::println("  [{}]: {}", i + 1, done_lines[i]);
       }
-      std::println("----------------------------------------");
+      std::println(
+          "-------------------------------------------------------------");
     }
   } else {
     return std::unexpected(TodoListError::LoadFailed);
