@@ -25,7 +25,7 @@ bool EditTask(TodoList &todo_list, const std::string &raw_line_number,
   try {
     const auto line_number = std::stoi(raw_line_number);
 
-    if (auto result = todo_list.Edit(line_number, text)) {
+    if (const auto result = todo_list.Edit(line_number, text)) {
       std::println("Successfully edited #{} to '{}'.", line_number, text);
       return true;
     } else if (result.error() == TodoListError::InvalidTaskText) {
@@ -52,7 +52,7 @@ bool RemoveTask(TodoList &todo_list, const std::string &raw_line_number) {
   try {
     const auto line_number = std::stoi(raw_line_number);
 
-    if (auto result = todo_list.Remove(line_number)) {
+    if (const auto result = todo_list.Remove(line_number)) {
       std::println("Successfully removed #{}.", line_number);
       return true;
     } else if (result.error() == TodoListError::TaskNotFound) {
@@ -76,7 +76,7 @@ bool DoneTask(TodoList &todo_list, const std::string &raw_line_number) {
   try {
     const auto line_number = std::stoi(raw_line_number);
 
-    if (auto result = todo_list.Done(line_number)) {
+    if (const auto result = todo_list.Done(line_number)) {
       std::println("Successfully marked #{} as done.", line_number);
       return true;
     } else if (result.error() == TodoListError::LoadFailed) {
