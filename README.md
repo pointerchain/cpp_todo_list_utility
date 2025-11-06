@@ -8,7 +8,7 @@
 $ ./todo help
 Help:
 -------------------------------------------------------------
-  add (a) <text>           : Add a new task
+  add (a) [h/m/l] <text>   : Add a new task (Default: [m])
   edit (e) <line> <text>   : Edit a task
   remove (r) <line>        : Remove a task
   done (d) <line>          : Mark a task as complete
@@ -17,41 +17,47 @@ Help:
   help (h)                 : List all utility commands
 -------------------------------------------------------------
 
-$ ./todo add Walk dog
-Successfully added 'Walk dog'.
+$ ./todo add "Call dentist"
+Successfully added '[m] Call dentist'.
 
-$ ./todo a "Take out garbagge"
-Successfully added 'Take out garbagge'.
+$ ./todo a "[h] Finish report"
+Successfully added '[h] Finish report'.
+
+$ ./todo a "[L] Water plants"
+Successfully added '[l] Water plants'.
+
+$ ./todo a "Buy milk"
+Successfully added '[m] Buy milk'.
 
 $ ./todo list
 To-Do List:
 -------------------------------------------------------------
 To-do:
-  [1]: Walk dog
-  [2]: Take out garbagge
+  [1]: [h] Finish report
+  [2]: [m] Call dentist
+  [3]: [m] Buy milk
+  [4]: [l] Water plants
 -------------------------------------------------------------
 
-$ ./todo edit 2 "Take out garbage"
-Successfully edited #2 to 'Take out garbage'.
-
-$ ./todo a "Read a chapter of C++ book"
-Successfully added 'Read a chapter of C++ book'.
-
-$ ./todo remove 2
-Successfully removed #2.
+$ ./todo edit 2 "Call dentist (tomorrow)"
+Successfully edited #2 to 'Call dentist (tomorrow)'.
 
 $ ./todo done 1
 Successfully marked #1 as done.
+
+$ ./todo r 3
+Successfully removed #3.
 
 $ ./todo l
 To-Do List:
 -------------------------------------------------------------
 To-do:
-  [1]: Read a chapter of C++ book
+  [1]: [m] Call dentist (tomorrow)
+  [2]: [l] Water plants
 -------------------------------------------------------------
 Done:
-  [1]: Walk dog
-----------------------------------------
+  [1]: [h] Finish report
+-------------------------------------------------------------
 
 $ ./todo clear
 Successfully cleared to-do list.
