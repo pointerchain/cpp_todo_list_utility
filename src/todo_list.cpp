@@ -65,7 +65,7 @@ std::expected<void, TodoListError> TodoList::Add(const std::string &text) {
   const auto first_lower = StringToLower(first_word);
 
   auto [file_editor,
-        text_to_append] = [&]() -> std::pair<FileEditor, std::string> {
+        text_to_append] = [&]() -> std::pair<FileEditor *, std::string> {
     if (first_lower == "[h]" || first_lower == "[m]" || first_lower == "[l]") {
 
       std::string rest_of_line{};
@@ -78,20 +78,20 @@ std::expected<void, TodoListError> TodoList::Add(const std::string &text) {
       std::string final_text = first_lower + ' ' + rest_of_line;
 
       if (first_lower == "[h]") {
-        return {todo_high_, final_text};
+        return {&todo_high_, final_text};
       } else if (first_lower == "[l]") {
-        return {todo_low_, final_text};
+        return {&todo_low_, final_text};
       } else {
-        return {todo_medium_, final_text};
+        return {&todo_medium_, final_text};
       }
 
     } else {
       std::string final_text = "[m] " + text;
-      return std::make_pair(todo_medium_, final_text);
+      return {&todo_medium_, final_text};
     }
   }();
 
-  if (!file_editor.Append(text_to_append)) {
+  if (!file_editor->Append(text_to_append)) {
     return std::unexpected(TodoListError::SaveFailed);
   }
 
