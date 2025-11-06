@@ -1,6 +1,7 @@
 // main.cpp
 
 #include "todo_list.hpp"
+#include "utils.hpp"
 
 #include <cctype>
 #include <iostream>
@@ -132,7 +133,7 @@ bool ClearTasks(TodoList &todo_list) {
 
 void OutputHelp(const bool is_interactive) {
   std::println("Help:");
-  std::println("-------------------------------------------------------------");
+  print_separator();
   std::println("  {:<24} : {}", "add (a) <text>", "Add a new task");
   std::println("  {:<24} : {}", "edit (e) <line> <text>", "Edit a task");
   std::println("  {:<24} : {}", "remove (r) <line>", "Remove a task");
@@ -143,7 +144,7 @@ void OutputHelp(const bool is_interactive) {
   if (is_interactive) {
     std::println("  {:<24} : {}", "quit (q)", "Exits out of interactive mode");
   }
-  std::println("-------------------------------------------------------------");
+  print_separator();
 }
 
 bool HandleCommand(const std::vector<std::string> args,
@@ -214,8 +215,7 @@ int main(const int argc, const char *argv[]) {
 
     std::println(
         "\nEntering interactive mode. (Type 'h' for help, 'q' to quit)\n");
-    std::println(
-        "-------------------------------------------------------------");
+    print_separator();
 
     std::string s;
     std::print("\n> ");
@@ -248,8 +248,7 @@ int main(const int argc, const char *argv[]) {
       std::print("\n> ");
     }
 
-    std::println(
-        "-------------------------------------------------------------");
+    print_separator();
   } else {
     const std::vector<std::string> args(argv, argv + argc);
 

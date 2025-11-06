@@ -1,4 +1,5 @@
 #include "todo_list.hpp"
+#include "utils.hpp"
 #include <expected>
 #include <print>
 
@@ -75,14 +76,12 @@ std::expected<void, TodoListError> TodoList::List() const {
     auto todo_lines = result.value();
 
     std::println("To-Do List:");
-    std::println(
-        "-------------------------------------------------------------");
+    print_separator();
     std::println("To-do:");
     for (size_t i = 0; i < todo_lines.size(); ++i) {
       std::println("  [{}]: {}", i + 1, todo_lines[i]);
     }
-    std::println(
-        "-------------------------------------------------------------");
+    print_separator();
 
     if (auto result_2 = done_.GetLines()) {
       auto done_lines = result_2.value();
@@ -91,8 +90,7 @@ std::expected<void, TodoListError> TodoList::List() const {
       for (size_t i = 0; i < done_lines.size(); ++i) {
         std::println("  [{}]: {}", i + 1, done_lines[i]);
       }
-      std::println(
-          "-------------------------------------------------------------");
+      print_separator();
     }
   } else {
     return std::unexpected(TodoListError::LoadFailed);
