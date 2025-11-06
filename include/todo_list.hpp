@@ -26,6 +26,16 @@ public:
   std::expected<void, TodoListError> List() const;
 
 private:
-  FileEditor todo_;
+  struct FileEditorLocation {
+    FileEditor &file_editor;
+    int relative_line_number;
+  };
+
+  std::expected<FileEditorLocation, TodoListError>
+  GetEditorLocationFromLineNumber(int line_number);
+
+  FileEditor todo_high_;
+  FileEditor todo_medium_;
+  FileEditor todo_low_;
   FileEditor done_;
 };

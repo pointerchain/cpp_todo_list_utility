@@ -21,6 +21,7 @@ public:
 
   std::expected<void, FileEditorError> Append(const std::string &text);
   std::expected<std::string, FileEditorError> GetLine(const int line_number);
+  std::expected<int, FileEditorError> GetLineCount() const;
   std::expected<void, FileEditorError> EditLine(const int line_numer,
                                                 const std::string &text);
   std::expected<void, FileEditorError> RemoveLine(const int line_number);

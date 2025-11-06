@@ -3,23 +3,11 @@
 #include "todo_list.hpp"
 #include "utils.hpp"
 
-#include <cctype>
 #include <iostream>
 #include <print>
 #include <sstream>
 #include <string>
 #include <vector>
-
-std::string StringToLower(const std::string &str) {
-  std::string new_string{};
-  new_string.reserve(str.size());
-
-  for (auto &c : str) {
-    new_string += tolower(static_cast<unsigned char>(c));
-  }
-
-  return new_string;
-}
 
 bool AddTask(TodoList &todo_list, const std::string &text) {
   if (todo_list.Add(text)) {
@@ -134,7 +122,8 @@ bool ClearTasks(TodoList &todo_list) {
 void OutputHelp(const bool is_interactive) {
   std::println("Help:");
   print_separator();
-  std::println("  {:<24} : {}", "add (a) <text>", "Add a new task");
+  std::println("  {:<24} : {}", "add (a) [h/m/l] <text>",
+               "Add a new task (Default: [m])");
   std::println("  {:<24} : {}", "edit (e) <line> <text>", "Edit a task");
   std::println("  {:<24} : {}", "remove (r) <line>", "Remove a task");
   std::println("  {:<24} : {}", "done (d) <line>", "Mark a task as complete");

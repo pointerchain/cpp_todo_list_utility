@@ -50,6 +50,22 @@ FileEditor::GetLine(const int line_number) {
   return std::unexpected(FileEditorError::LineNotFound);
 }
 
+std::expected<int, FileEditorError> FileEditor::GetLineCount() const {
+  std::ifstream file(file_name_);
+
+  if (!file.is_open()) {
+    return std::unexpected(FileEditorError::OpenSourceFailed);
+  }
+
+  int line_count{};
+  std::string line;
+  while (std::getline(file, line)) {
+    ++line_count;
+  }
+
+  return line_count;
+}
+
 std::expected<void, FileEditorError>
 FileEditor::EditLine(const int line_number, const std::string &text) {
   if (line_number < 1) {
