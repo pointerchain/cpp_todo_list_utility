@@ -1,4 +1,4 @@
 Future Features:
 - Add FileEditor::PopLine
-- Add Task Priority
+- Add Task Priority (DONE)
 - Add Interactive Mode (DONE)
