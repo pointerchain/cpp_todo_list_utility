@@ -1,6 +1,6 @@
 # CPP To-Do List Utility
 
-> A a to-do list utility that uses command-line arguments to add tasks, remove tasks, and list all tasks.
+> A to-do list utility that uses command-line arguments to add tasks, remove tasks, and list all tasks.
 
 ### Example
 
